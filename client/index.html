@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Back End Assessment</title>
+  </head>
+  <body class="container">
+    <button id="complimentButton">Get a compliment</button>
+    <button id="zultar">Feeling Fortunate?</button>
+    <button id="tarot">Hmmmm...</button>
+    <button id="meme">Practice making Memes</button>
+    <div id="memeContainer"></div>
+    <button id="image">Does this mean anything to you?</button>
+    <div id="imgC"></div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      let body = document.querySelector("body");
+      let img = document.getElementById("image");
+      let imgC = document.getElementById("imgC");
+      let meme = document.getElementById("meme");
+      let memeC = document.getElementById("memeContainer");
+
+      const memeGen = () => {
+        axios.get("https://api.imgflip.com/get_memes").then(function (res) {
+          let memePicker = Math.floor(
+            Math.random() * res.data.data.memes.length
+          );
+          let meme = res.data.data.memes[memePicker];
+          console.log(meme);
+          let memeImg = document.createElement("img");
+          memeImg.setAttribute("src", meme.url);
+          body.appendChild(memeImg);
+        });
+      };
+
+      document.getElementById("complimentButton").onclick = function () {
+        axios
+          .get("http://localhost:4000/api/compliment/")
+          .then(function (response) {
+            const data = response.data;
+            alert(data);
+          });
+      };
+      document.getElementById("zultar").onclick = function () {
+        axios
+          .get("http://localhost:4000/api/fortunes/")
+          .then(function (response) {
+            const data = response.data;
+            alert(data);
+          });
+      };
+
+      document.getElementById("tarot").onclick = function () {
+        body.removeChild(body.lastChild);
+        axios
+          .get("https://rws-cards-api.herokuapp.com/api/v1/cards/random?n=1")
+          .then((res) => {
+            console.log(res.data);
+            for (let i = 0; i < res.data.cards.length; i++) {
+              body.removeChild(body.lastChild);
+              let name = res.data.cards[i].name;
+              let meaning = res.data.cards[i].meaning_up;
+              console.log(name);
+              console.log(meaning);
+              let card = document.createElement("h3");
+              card.innerHTML = name;
+              body.appendChild(card);
+              let meaningBody = document.createElement("section");
+              meaningBody.textContent = meaning;
+              body.appendChild(card);
+              body.appendChild(meaningBody);
+              alert(
+                `This is your Tarot Card, all things happen for a reason...keep your eyes open`
+              );
+            }
+          });
+      };
+
+      const image = () => {
+        let imageContainer = document.createElement("img");
+        imageContainer.setAttribute(
+          "src",
+          "https://random.imagecdn.app/500/150"
+        );
+        imgC.appendChild(imageContainer);
+      };
+
+      img.addEventListener("click", image);
+      meme.addEventListener("click", memeGen);
+    </script>
+  </body>
+</html>
