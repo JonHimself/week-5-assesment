@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="index.css" />
     <title>Back End Assessment</title>
   </head>
   <body class="container">
@@ -63,7 +64,7 @@
               console.log(name);
               console.log(meaning);
               let card = document.createElement("h3");
-              card.innerHTML = name;
+              card.innerHTML = `${name}`;
               body.appendChild(card);
               let meaningBody = document.createElement("section");
               meaningBody.textContent = meaning;
